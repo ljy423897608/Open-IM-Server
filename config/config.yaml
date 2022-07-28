@@ -2,16 +2,19 @@
 # The class cannot be named by Pascal or camel case.
 # If it is not used, the corresponding structure will not be set,
 # and it will not be read naturally.
+
+# 10.12.12.81(公司)部署：etcd mysql mongodb redis kafka
+# 124.221.31.170(腾讯)部署：minio
 serverversion: 2.3.0-rc1
 #---------------Infrastructure configuration---------------------#
 etcd:
   etcdSchema: openim  #默认即可
-  etcdAddr: [ 127.0.0.1:2379 ] #单机部署时，默认即可
+  etcdAddr: [ 10.12.12.81:2379 ] #单机部署时，默认即可
 
 k8sMod: false #开启k8s模式 使用pod里面环境变量请求services调用服务 而并非etcd
 
 mysql:
-  dbMysqlAddress: [ 127.0.0.1:13306 ] #mysql地址 目前仅支持单机，默认即可
+  dbMysqlAddress: [ 10.12.12.81:13306 ] #mysql地址 目前仅支持单机，默认即可
   dbMysqlUserName: root #mysql用户名，建议修改
   dbMysqlPassword: openIM # mysql密码，建议修改
   dbMysqlDatabaseName: openIM_v2 #默认即可
@@ -23,7 +26,7 @@ mysql:
 
 mongo:
   dbUri: ""#当dbUri值不为空则直接使用该值
-  dbAddress: 127.0.0.1:37017  #单机时为mongo地址，使用分片集群时，为mongos地址 默认即可
+  dbAddress: 10.12.12.81:37017  #单机时为mongo地址，使用分片集群时，为mongos地址 默认即可
   dbDirect: false
   dbTimeout: 60
   dbDatabase: openIM  #mongo db 默认即可
@@ -34,7 +37,7 @@ mongo:
   dbRetainChatRecords: 3650 #mongo保存离线消息时间（天），根据需求修改
 
 redis:
-  dbAddress: [ 127.0.0.1:16379 ] #redis地址 单机时，填写一个地址即可，使用redis集群时候，填写集群中多个节点地址（主从地址都可以填写，增加容灾能力），默认即可
+  dbAddress: [ 10.12.12.81:16379 ] #redis地址 单机时，填写一个地址即可，使用redis集群时候，填写集群中多个节点地址（主从地址都可以填写，增加容灾能力），默认即可
   dbMaxIdle: 128
   dbMaxActive: 0
   dbIdleTimeout: 120
@@ -44,16 +47,16 @@ redis:
 
 kafka:
   ws2mschat:
-    addr: [ 127.0.0.1:9092 ] #kafka配置，默认即可
+    addr: [ 10.12.12.81:9092 ] #kafka配置，默认即可
     topic: "ws2ms_chat"
   ws2mschatoffline:
-    addr: [ 127.0.0.1:9092 ] #kafka配置，默认即可
+    addr: [ 10.12.12.81:9092 ] #kafka配置，默认即可
     topic: "ws2ms_chat_offline"
   msgtomongo:
-    addr: [ 127.0.0.1:9092 ] #kafka配置，默认即可
+    addr: [ 10.12.12.81:9092 ] #kafka配置，默认即可
     topic: "msg_to_mongo"
   ms2pschat:
-    addr: [ 127.0.0.1:9092 ] #kafka配置，默认即可
+    addr: [ 10.12.12.81:9092 ] #kafka配置，默认即可
     topic: "ms2ps_chat"
   consumergroupid:
     msgToTransfer: mongo
@@ -103,21 +106,21 @@ sdk:
   dataDir: [ ../db/sdk/ ]
 #对象存储服务，以下配置二选一，目前支持两种，腾讯云和minio，二者配置好其中一种即可（如果使用minio参考https://doc.rentsoft.cn/#/qa/minio搭建minio服务器）
 credential: #腾讯cos，发送图片、视频、文件时需要，请自行申请后替换，必须修改
-  tencent:
-    appID: 1302656840
-    region: ap-chengdu
-    bucket: echat-1302656840
-    secretID: AKIDGNYVChzIQinu7QEgtNp0hnNgqcV8vZTC1
-    secretKey: kz15vW83qM6dBUWIq681eBZA0c0vlIbe1
+#  tencent:
+#    appID: 1302656840
+#    region: ap-chengdu
+#    bucket: echat-1302656840
+#    secretID: AKIDGNYVChzIQinu7QEgtNp0hnNgqcV8vZTC1
+#    secretKey: kz15vW83qM6dBUWIq681eBZA0c0vlIbe1
   minio: #MinIO 发送图片、视频、文件时需要，请自行申请后替换，必须修改。 客户端初始化InitSDK，中 object_storage参数为minio
     bucket: openim # 存储内容桶
     appBucket: app # 存储app的桶
     location: us-east-1
-    endpoint: http://127.0.0.1:10005 #minio外网ip 这个ip是给客户端访问的
-    endpointInner: http://127.0.0.1:10005 #minio内网地址 如果im server 可以通过内网访问到 minio就可以填写
+    endpoint: http://124.221.31.170:9090 #minio外网ip 这个ip是给客户端访问的(还是要生成的？？？可用)
+    endpointInner: http://124.221.31.170:9090 #minio内网地址 如果im server 可以通过内网访问到 minio就可以填写
     endpointInnerEnable: true #是否启用minio内网地址 启用可以让桶初始化，IM server连接minio走内网地址访问
-    accessKeyID: user12345
-    secretAccessKey: key12345
+    accessKeyID: zEcbEaFj57tmEh7J
+    secretAccessKey: WlkvHONdheeWiv2FxLGKvQ76PsImO4at
   ali: # ali oss
     regionID: "oss-cn-beijing"
     accessKeyID: ""
